@@ -35,6 +35,7 @@ public class ProcessData {
         else if (type.equals("backing")) {path = ".data/backing/"+name;}
         else {throw new RuntimeException("falscher typ: "+type);}*/
 
+
         File file = new File(path);
         try {
             FileReader fr = new FileReader(file);
