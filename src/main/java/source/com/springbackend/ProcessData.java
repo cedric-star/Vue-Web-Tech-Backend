@@ -212,17 +212,12 @@ public class ProcessData {
     /**
      * Description:
      * Getter for messages,
-     * turns String into Json Object, it
-     * can be interpreted by JavaSkript.
+     * if there are no messages,
      * @return String error message
      * @see MessageController
      */
     private String getMessages() {
-        if (message.isEmpty()) return "{\"message\":\"no errors occured!\"}";
-        else {
-            String output = "{\"message\":\""+message+"\"}";
-            return output;
-        }
+        return (message.isEmpty()) ? "successfully saved recipe!" : message;
     }
 
 }

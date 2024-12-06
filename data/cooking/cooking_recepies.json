@@ -1,32 +1,3 @@
 [
-  {
-    "process": "dffd",
-    "name": "d",
-    "ingredients": "pp",
-    "type": "cooking"
-  },
-  {
-    "process": "dffd",
-    "name": "d",
-    "ingredients": "pp",
-    "type": "cooking"
-  },
-  {
-    "process": "jj",
-    "name": "jj",
-    "ingredients": "jj",
-    "type": "cooking"
-  },
-  {
-    "process": "jj",
-    "name": "jj",
-    "ingredients": "jj",
-    "type": "cooking"
-  },
-  {
-    "process": "l",
-    "name": "l",
-    "ingredients": "l",
-    "type": "cooking"
-  }
+
 ]
