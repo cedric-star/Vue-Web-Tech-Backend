@@ -17,8 +17,10 @@ public class CorsConfig {
     /**
      * Description:
      * Defines allowed parameters:
-     * origins, methods,
-     * @return
+     * origins, methods.
+     * Mapping to /** so every path will be mapped with
+     * those CORS regulations.
+     * @return Adds the WebMvcConfigurer to Spring Application
      */
     @Bean
     public WebMvcConfigurer corsConfigurer() {
@@ -26,7 +28,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:8080", "http://localhost:8081") // Ersetze dies mit der URL deiner Webseite
+                        .allowedOrigins("http://localhost:8080", "http://localhost:8081")
                         .allowedMethods("GET", "POST")
                         .allowedHeaders("*")
                         .allowCredentials(true);
