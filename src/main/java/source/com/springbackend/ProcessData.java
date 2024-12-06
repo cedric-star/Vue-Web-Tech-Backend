@@ -45,20 +45,28 @@ public class ProcessData {
      * Wrapper Method for everything,
      * creates JSONArray, adds JSONObject,
      * finally writes everything back.
+     * Try catch block wrapping code so the error
+     * (if happen) don´t conflict with the running code.
      * @param input Incoming Json Object from frontend.
+     * @return messages for frontend and console logging
      */
-    public void safeInput(String input) {
-        JSONObject inputJson = checkInput(input);
+    public String safeInput(String input) {
+        try {
+            JSONObject inputJson = checkInput(input);
 
-        String path = getPathByType(inputJson);
-        JSONArray jsonArray = readFromJson(path);
+            String path = getPathByType(inputJson);
+            JSONArray jsonArray = readFromJson(path);
 
-        jsonArray.put(inputJson);
+            jsonArray.put(inputJson);
 
-        write2json(jsonArray, path);
-
-        System.out.println("Finished processing input,\nerror messages: ");
-        for (String msg : messages) {System.err.println(msg);}
+            write2json(jsonArray, path);
+        } catch (Exception e) {
+            System.err.println("An Exception occured: " + e.getMessage());
+        }
+        String msg = getMessages();
+        clearMessageHistory();
+        System.out.println(msg);
+        return msg;
     }
 
 
@@ -208,11 +216,31 @@ public class ProcessData {
      * @return ArrayList of error messages
      * @see MessageController
      */
-    public String getMessages() {
-        JSONArray jsonArray = new JSONArray();
-        for (String msg : messages) {
-            jsonArray.put(msg);
+    private String getMessages() {
+        String msgSend;
+
+        if (messages.isEmpty()) msgSend = "no errors occured!";
+        else {
+            JSONArray jsonArray = new JSONArray();
+            for (String msg : messages) {
+                jsonArray.put(msg);
+            }
+            msgSend = jsonArray.toString();
         }
-        return jsonArray.toString(0);
+        return msgSend;
+    }
+
+
+    /**
+     * Description
+     * After every use of saving Data,
+     * the messages should be cleared, so that the
+     * next saving process does not come in conflict
+     * with the old messages.
+     * Is also called in getMessage().
+     */
+    private void clearMessageHistory() {
+        this.messages.clear();
+        messages = new ArrayList<>(4);
     }
 }

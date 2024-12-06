@@ -25,8 +25,7 @@ public class MessageController {
      */
     @PostMapping("/adddata")
     public String getData(@RequestBody String data) {
-        processData.safeInput(data);
-        return processData.getMessages().toString();
+        return processData.safeInput(data);
     }
 
 }
