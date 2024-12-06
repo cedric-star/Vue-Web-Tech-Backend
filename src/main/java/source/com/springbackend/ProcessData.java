@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.JSONString;
 
 /**
  * Description:
@@ -21,7 +22,7 @@ public class ProcessData {
     private String path_backing;
     private String path_coocking;
     private String[] requiredJsonKeys;
-    private ArrayList<String> messages;
+    private String message;
 
 
     /**
@@ -36,7 +37,7 @@ public class ProcessData {
         this.path_backing="./data/baking/baking_recepies.json";
         this.path_coocking="./data/cooking/cooking_recepies.json";
         this.requiredJsonKeys = new String[]{"type", "name", "ingredients", "process"};
-        this.messages = new ArrayList<>(4);
+        this.message = "";
     }
 
 
@@ -48,7 +49,7 @@ public class ProcessData {
      * Try catch block wrapping code so the error
      * (if happen) don´t conflict with the running code.
      * @param input Incoming Json Object from frontend.
-     * @return messages for frontend and console logging
+     * @return message for frontend and console logging
      */
     public String safeInput(String input) {
         try {
@@ -64,7 +65,7 @@ public class ProcessData {
             System.err.println("An Exception occured: " + e.getMessage());
         }
         String msg = getMessages();
-        clearMessageHistory();
+        message = "";
         System.out.println(msg);
         return msg;
     }
@@ -198,12 +199,12 @@ public class ProcessData {
      * Description:
      * When a fatal error occures, the error message
      * is being printed out and also
-     * saved in a ArrayList so that it can be sent
+     * saved as String so that it can be sent
      * back for user information
      * @param message Error message that will be sent to user and console.
      */
     private void errorHandler(String message) {
-        messages.add(message);
+        this.message = message;
         throw new RuntimeException(message);
     }
 
@@ -211,36 +212,17 @@ public class ProcessData {
     /**
      * Description:
      * Getter for messages,
-     * turns ArrayList into Json Array, it
+     * turns String into Json Object, it
      * can be interpreted by JavaSkript.
-     * @return ArrayList of error messages
+     * @return String error message
      * @see MessageController
      */
     private String getMessages() {
-        String msgSend;
-
-        if (messages.isEmpty()) msgSend = "no errors occured!";
+        if (message.isEmpty()) return "{\"message\":\"no errors occured!\"}";
         else {
-            JSONArray jsonArray = new JSONArray();
-            for (String msg : messages) {
-                jsonArray.put(msg);
-            }
-            msgSend = jsonArray.toString();
+            String output = "{\"message\":\""+message+"\"}";
+            return output;
         }
-        return msgSend;
     }
 
-
-    /**
-     * Description
-     * After every use of saving Data,
-     * the messages should be cleared, so that the
-     * next saving process does not come in conflict
-     * with the old messages.
-     * Is also called in getMessage().
-     */
-    private void clearMessageHistory() {
-        this.messages.clear();
-        messages = new ArrayList<>(4);
-    }
 }
