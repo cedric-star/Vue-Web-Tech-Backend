@@ -24,8 +24,18 @@ public class MessageController {
      * @return Error messages for user instructions.
      */
     @PostMapping("/adddata")
-    public String getData(@RequestBody String data) {
+    public String addData(@RequestBody String data) {
         return processData.safeInput(data);
     }
+
+
+    @PostMapping("getdata")
+    public String getData(@RequestBody String data) {
+        //String path = processData.getPathByType()
+        return null;
+    }
+
+
+
 
 }

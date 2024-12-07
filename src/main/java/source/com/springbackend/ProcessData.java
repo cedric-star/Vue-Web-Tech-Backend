@@ -111,7 +111,7 @@ public class ProcessData {
      * @param inputJson Parsed Json Object from frontend.
      * @return Path to correct Json File or null and throws RuntimeException().
      */
-    private String getPathByType(JSONObject inputJson) {
+    public String getPathByType(JSONObject inputJson) {
         String type = inputJson.getString("type");
         if (type.equals("cooking")) {return path_coocking;}
         else if (type.equals("baking")) {return path_backing;}
@@ -128,7 +128,7 @@ public class ProcessData {
      * @param path Decides wich Json File should be read from.
      * @return Json Array from backend Json File.
      */
-    private JSONArray readFromJson(String path) {
+    public JSONArray readFromJson(String path) {
         StringBuilder content = new StringBuilder();
         FileInputStream fis = null;
         BufferedInputStream bis = null;
