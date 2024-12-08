@@ -1,0 +1,58 @@
+[
+  {
+    "process": "Mix flour, sugar, and baking powder in a bowl. Add butter and eggs and mix until smooth. Pour into a loaf pan and bake at 180°C for 40 minutes.",
+    "additives": "",
+    "name": "Vanilla Pound Cake",
+    "ingredients": "Flour (250g), Sugar (200g), Baking powder (1 tsp), Butter (200g), Eggs (3)",
+    "type": "baking"
+  },
+  {
+    "process": "Combine flour, sugar, cocoa powder, baking powder, and milk. Pour the mixture into a muffin tray and bake at 180°C for 20 minutes.",
+    "additives": "vegetarian",
+    "name": "Chocolate Muffins",
+    "ingredients": "Flour (200g), Sugar (150g), Cocoa powder (50g), Baking powder (1 tsp), Milk (200ml)",
+    "type": "baking"
+  },
+  {
+    "process": "Mix rolled oats, honey, and melted butter. Press the mixture into a baking dish and bake at 160°C for 25 minutes until golden.",
+    "additives": "vegetarian",
+    "name": "Oat Bars",
+    "ingredients": "Rolled oats (300g), Honey (100g), Butter (100g, melted)",
+    "type": "baking"
+  },
+  {
+    "process": "Mix flour, yeast, sugar, salt, and water to form a dough. Let rise for 1 hour, then bake at 200°C for 25 minutes.",
+    "additives": "vegan",
+    "name": "Rustic Bread",
+    "ingredients": "Flour (500g), Yeast (7g), Sugar (1 tsp), Salt (1 tsp), Water (300ml)",
+    "type": "baking"
+  },
+  {
+    "process": "Whisk eggs and sugar until fluffy. Add flour and vanilla extract. Pour into a pan and bake at 180°C for 20 minutes.",
+    "additives": "vegetarian",
+    "name": "Vanilla Sponge Cake",
+    "ingredients": "Eggs (4), Sugar (150g), Flour (100g), Vanilla extract (1 tsp)",
+    "type": "baking"
+  },
+  {
+    "process": "Combine apples, sugar, and cinnamon. Place in a baking dish and cover with a mix of oats, butter, and sugar. Bake at 180°C for 30 minutes.",
+    "additives": "vegetarian",
+    "name": "Apple Crumble",
+    "ingredients": "Apples (4), Sugar (100g), Cinnamon (1 tsp), Oats (100g), Butter (100g)",
+    "type": "baking"
+  },
+  {
+    "process": "Mix cream cheese, sugar, and eggs. Pour over a graham cracker crust and bake at 160°C for 40 minutes.",
+    "additives": "vegetarian",
+    "name": "Cheesecake",
+    "ingredients": "Cream cheese (400g), Sugar (150g), Eggs (3), Graham crackers (200g)",
+    "type": "baking"
+  },
+  {
+    "process": "Combine flour, butter, sugar, and water to form a dough. Roll out and place in a pie dish. Add filling and bake at 180°C for 35 minutes.",
+    "additives": "vegetarian",
+    "name": "Fruit Pie",
+    "ingredients": "Flour (250g), Butter (150g), Sugar (50g), Water (2 tbsp), Fruit filling (500g)",
+    "type": "baking"
+  }
+]

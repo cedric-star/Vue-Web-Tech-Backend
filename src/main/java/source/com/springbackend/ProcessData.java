@@ -34,8 +34,8 @@ public class ProcessData {
      * about if or if not everything worked.
      */
     public ProcessData() {
-        this.path_backing="./data/baking/baking_recepies.json";
-        this.path_coocking="./data/cooking/cooking_recepies.json";
+        this.path_backing="./data/baking/baking_recipes.json";
+        this.path_coocking="./data/cooking/cooking_recipes.json";
         this.requiredJsonKeys = new String[]{"type", "name", "ingredients", "process"};
         this.message = "";
     }
@@ -97,7 +97,7 @@ public class ProcessData {
                 errorHandler("Error, key: "+requiredJsonKey+" is empty");
             }
         }
-        if (jsonObject.length()!=requiredJsonKeys.length) {
+        if (jsonObject.length()!=requiredJsonKeys.length+1) {//plus on because of additives are not required
             errorHandler("Error, input length "+requiredJsonKeys.length+" != "+jsonObject.length());
         }
         return jsonObject;

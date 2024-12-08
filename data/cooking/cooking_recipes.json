@@ -1,0 +1,58 @@
+[
+  {
+    "process": "Cut the chicken into small pieces and fry it in a pan. Add the diced onions and bell peppers and fry them together. Pour in the coconut milk and curry paste and let everything simmer until the chicken is cooked through.",
+    "additives": "meat",
+    "name": "Chicken Curry",
+    "ingredients": "Chicken breast (500g), Onion (1), Bell pepper (2), Coconut milk (400ml), Curry paste (2 tbsp)",
+    "type": "cooking"
+  },
+  {
+    "process": "Boil the pasta in salted water until al dente. In a pan, sauté garlic and chili flakes in olive oil. Add cooked pasta and toss to coat. Garnish with fresh parsley.",
+    "additives": "vegetarian",
+    "name": "Spaghetti Aglio e Olio",
+    "ingredients": "Spaghetti (200g), Garlic (3 cloves), Chili flakes (1 tsp), Olive oil (2 tbsp), Parsley (fresh, chopped)",
+    "type": "cooking"
+  },
+  {
+    "process": "Heat the oil in a pot and fry diced onions and garlic. Add the lentils, spices, and vegetable broth. Simmer until the lentils are soft and the soup is thickened.",
+    "additives": "vegan",
+    "name": "Lentil Soup",
+    "ingredients": "Red lentils (200g), Onion (1), Garlic (2 cloves), Vegetable broth (1L), Cumin (1 tsp), Paprika (1 tsp)",
+    "type": "cooking"
+  },
+  {
+    "process": "Marinate the salmon fillets with soy sauce, honey, and garlic. Bake in the oven at 200°C for 15-20 minutes until cooked through.",
+    "additives": "fish",
+    "name": "Honey Soy Salmon",
+    "ingredients": "Salmon fillets (2), Soy sauce (2 tbsp), Honey (1 tbsp), Garlic (1 clove, minced)",
+    "type": "cooking"
+  },
+  {
+    "process": "Fry diced potatoes in a pan until golden and crispy. Add diced onions, bacon, and season with salt and pepper. Cook until everything is browned.",
+    "additives": "meat",
+    "name": "Pan-Fried Potatoes",
+    "ingredients": "Potatoes (500g), Onion (1), Bacon (100g), Salt (to taste), Pepper (to taste)",
+    "type": "cooking"
+  },
+  {
+    "process": "Mix diced tomatoes, garlic, and olive oil in a pot. Cook on low heat for 30 minutes. Blend until smooth and serve with cooked spaghetti.",
+    "additives": "vegan",
+    "name": "Tomato Sauce",
+    "ingredients": "Tomatoes (500g), Garlic (2 cloves), Olive oil (2 tbsp), Basil (fresh, optional)",
+    "type": "cooking"
+  },
+  {
+    "process": "Stir-fry tofu cubes in sesame oil until crispy. Add soy sauce, ginger, and garlic. Serve with steamed vegetables and rice.",
+    "additives": "vegan",
+    "name": "Tofu Stir-Fry",
+    "ingredients": "Tofu (300g), Sesame oil (1 tbsp), Soy sauce (2 tbsp), Ginger (1 tsp, grated), Garlic (2 cloves), Vegetables (steamed)",
+    "type": "cooking"
+  },
+  {
+    "process": "Fry chopped spinach and garlic in olive oil. Mix with cooked pasta and top with grated Parmesan cheese.",
+    "additives": "vegetarian",
+    "name": "Spinach Pasta",
+    "ingredients": "Spinach (300g), Garlic (2 cloves), Olive oil (2 tbsp), Pasta (200g), Parmesan cheese (grated, to taste)",
+    "type": "cooking"
+  }
+]

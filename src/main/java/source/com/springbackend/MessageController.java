@@ -1,5 +1,7 @@
 package source.com.springbackend;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -29,13 +31,27 @@ public class MessageController {
     }
 
 
+    /**
+     * Description:
+     * Defines /app/getdata as url for receiving
+     * the Json Data for either cooking or
+     * baking.
+     * @param type Decides if cooking or baking recipes.
+     * @return Sends data back to user.
+     * @see ProcessData
+     */
     @PostMapping("getdata")
-    public String getData(@RequestBody String data) {
-        //String path = processData.getPathByType()
-        return null;
+    public String getData(@RequestBody String type) {
+        System.out.println("type: "+type);
+
+        String path = "";
+        if (type.equals("cooking")) path = "./data/cooking/cooking_recipes.json";
+        if (type.equals("baking")) path = "./data/baking/baking_recipes.json";
+        if (path.isEmpty()) return "wrong recipe type";
+        System.out.println("path: "+path);
+
+        String output = processData.readFromJson(path).toString(0);
+        System.out.println("output: "+output);
+        return output;
     }
-
-
-
-
 }
