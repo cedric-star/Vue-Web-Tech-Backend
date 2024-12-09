@@ -54,4 +54,10 @@ public class MessageController {
         System.out.println("output: "+output);
         return output;
     }
+
+    @PostMapping("deletedata")
+    public String deleteData(@RequestBody String name) {
+        System.out.println("deleting: "+name);
+        return "successfully deleted recipe!";
+    }
 }
