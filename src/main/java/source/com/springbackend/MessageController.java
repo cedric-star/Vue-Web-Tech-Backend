@@ -27,6 +27,7 @@ public class MessageController {
      */
     @PostMapping("/adddata")
     public String addData(@RequestBody String data) {
+        System.out.println("trying to add: "+data);
         return processData.safeInput(data);
     }
 
@@ -42,22 +43,21 @@ public class MessageController {
      */
     @PostMapping("getdata")
     public String getData(@RequestBody String type) {
-        System.out.println("type: "+type);
-
-        String path = "";
-        if (type.equals("cooking")) path = "./data/cooking/cooking_recipes.json";
-        if (type.equals("baking")) path = "./data/baking/baking_recipes.json";
-        if (path.isEmpty()) return "wrong recipe type";
-        System.out.println("path: "+path);
-
-        String output = processData.readFromJson(path).toString(0);
-        System.out.println("output: "+output);
-        return output;
+        System.out.println("trying to get:"+type);
+        return processData.getData(type);
     }
 
+
+    /**
+     * Description:
+     * Definges /app/deletedata as url for deleting an Json
+     * Object in the Json Files.
+     * @param msg gives name and type of recipe: "name;type"
+     * @return Sends user information message back to user.
+     */
     @PostMapping("deletedata")
-    public String deleteData(@RequestBody String name) {
-        System.out.println("deleting: "+name);
-        return "successfully deleted recipe!";
+    public String deleteData(@RequestBody String msg) {
+        System.out.println("trying to delete: "+msg);
+        return processData.deleteInput(msg);
     }
 }

@@ -2,6 +2,8 @@ package source.com.springbackend;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.function.Function;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONString;
@@ -55,7 +57,7 @@ public class ProcessData {
         try {
             JSONObject inputJson = checkInput(input);
 
-            String path = getPathByType(inputJson);
+            String path = getPathByType(inputJson.getString("type"));
             JSONArray jsonArray = readFromJson(path);
 
             jsonArray.put(inputJson);
@@ -64,11 +66,76 @@ public class ProcessData {
         } catch (Exception e) {
             System.err.println("An Exception occured: " + e.getMessage());
         }
-        String msg = getMessages();
+        String msg = getMessages("successfully saved recipe");
         message = "";
         System.out.println(msg);
         return msg;
     }
+
+    public String getData(String type) {
+        System.out.println("type: "+type);
+
+        String path = getPathByType(type);
+
+        System.out.println("path: "+path);
+        if (path.isEmpty()) return "wrong recipe type";
+
+        String output = readFromJson(path).toString(0);
+        System.out.println("output: "+output);
+        String msg = getMessages("successfully got data");
+        message = "";
+        System.out.println(msg);
+        return output;
+    }
+
+
+    public String deleteInput(String input) {
+        try {
+            String[] inputAr = input.split(";");
+            String name = inputAr[0];
+            if (!isItemInData(name)) return "no such recipe name: "+name;
+            String type = inputAr[1];
+            String path = getPathByType(type);
+
+            String removedItemName = "";
+            JSONArray jsonArray = readFromJson(path);
+
+            for (int i= jsonArray.length()-1; i>=0; i--) {
+                removedItemName = jsonArray.getJSONObject(i).getString("name");
+                if (removedItemName.equals(name)) {
+                    jsonArray.remove(i);
+                    break;
+                }
+            }
+            write2json(jsonArray, path);
+            System.out.println("successfully deleted: "+removedItemName);
+
+        } catch (Exception e) {
+            System.err.println("An Exception occured: " + e.getMessage());
+        }
+        String msg = getMessages("successfully deleted data");
+        message = "";
+        System.out.println(msg);
+        return msg.isEmpty() ? "successfully deleted recipe!" : msg;
+    }
+
+
+    private boolean isItemInData(String name) {
+        JSONArray cookingRecipes = readFromJson(path_coocking);
+        JSONArray bakingRecipes = readFromJson(path_coocking);
+        for (int i=0; i<cookingRecipes.length(); i++) {
+            if (cookingRecipes.getJSONObject(i).getString("name").equals(name)) {
+                return true;
+            }
+        }
+        for (int i=0; i<bakingRecipes.length(); i++) {
+            if (cookingRecipes.getJSONObject(i).getString("name").equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
 
     /**
@@ -108,11 +175,10 @@ public class ProcessData {
      * Description:
      * Reads the type of Json Object and
      * decides if it´s stored in cooking or baking
-     * @param inputJson Parsed Json Object from frontend.
+     * @param type Parsed Json Object from frontend.
      * @return Path to correct Json File or null and throws RuntimeException().
      */
-    public String getPathByType(JSONObject inputJson) {
-        String type = inputJson.getString("type");
+    private String getPathByType(String type) {
         if (type.equals("cooking")) {return path_coocking;}
         else if (type.equals("baking")) {return path_backing;}
         else { errorHandler("Invalid type: "+type);}
@@ -128,7 +194,7 @@ public class ProcessData {
      * @param path Decides wich Json File should be read from.
      * @return Json Array from backend Json File.
      */
-    public JSONArray readFromJson(String path) {
+    private JSONArray readFromJson(String path) {
         StringBuilder content = new StringBuilder();
         FileInputStream fis = null;
         BufferedInputStream bis = null;
@@ -216,8 +282,8 @@ public class ProcessData {
      * @return String error message
      * @see MessageController
      */
-    private String getMessages() {
-        return (message.isEmpty()) ? "successfully saved recipe!" : message;
+    private String getMessages(String emptyMessage) {
+        return (message.isEmpty()) ? emptyMessage : message;
     }
 
 }
