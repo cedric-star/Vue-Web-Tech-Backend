@@ -1,13 +1,9 @@
 package source.com.springbackend;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.function.Function;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONString;
+
+import org.json.*;
 
 /**
  * Description:
@@ -69,7 +65,7 @@ public class ProcessData {
             write2json(jsonArray, path);
         } catch (Exception e) {
             System.err.println("An Exception occured in safeInput(): " + e.getMessage());
-            e.printStackTrace();
+            System.out.println("\n"+e);
         }
 
         String msg = getMessages("successfully saved recipe");
@@ -82,18 +78,18 @@ public class ProcessData {
     public String getData(String type) {
         this.message = "";
         String output = "";
+        String path = "";
         try {
-            String path = getPathByType(type);
+            path = getPathByType(type);
 
             System.out.println("path: "+path);
-            if (path.isEmpty()) return "wrong recipe type";
+            if (path != null ? path.isEmpty() : false) return "wrong recipe type";
 
             output = readFromJson(path).toString(0);
             System.out.println("output: "+output);
-            String msg = getMessages("successfully got data");
         } catch (Exception e) {
             System.err.println("An Exception occured in getData(): " + e.getMessage());
-            e.printStackTrace();
+            System.out.println("\n"+e);
         }
 
         String msg = getMessages("successfully saved recipe");
@@ -128,7 +124,7 @@ public class ProcessData {
 
         } catch (Exception e) {
             System.err.println("An Exception occured in deleteInput(): "+e.getMessage());
-            e.printStackTrace();
+            System.out.println("\n"+e);
         }
 
         String msg = getMessages("successfully deleted data");
@@ -192,7 +188,7 @@ public class ProcessData {
             if (!jsonObject.has(requiredJsonKey)) {
                 errorHandler("Error, input hasn´t key "+requiredJsonKey);
             }
-            if (jsonObject.getString(requiredJsonKey).equals("")) {
+            if (jsonObject.getString(requiredJsonKey).isEmpty()) {
                 errorHandler("Error, key: "+requiredJsonKey+" is empty");
             }
         }
