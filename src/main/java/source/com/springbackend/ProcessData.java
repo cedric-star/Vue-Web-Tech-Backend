@@ -56,6 +56,8 @@ public class ProcessData {
     public String safeInput(String input) {
         try {
             JSONObject inputJson = checkInput(input);
+            if (isItemInData(inputJson.getString("name"))) return "already saved: "+inputJson.getString("name");
+
 
             String path = getPathByType(inputJson.getString("type"));
             JSONArray jsonArray = readFromJson(path);
@@ -89,6 +91,8 @@ public class ProcessData {
     }
 
 
+
+
     public String deleteInput(String input) {
         try {
             String[] inputAr = input.split(";");
@@ -119,7 +123,12 @@ public class ProcessData {
         return msg.isEmpty() ? "successfully deleted recipe!" : msg;
     }
 
-
+    /**
+     * Description:
+     * Takes name and looks for it in the Json File.
+     * @param name This name should stand in Json File "name":""
+     * @return True if found, false if not.
+     */
     private boolean isItemInData(String name) {
         JSONArray cookingRecipes = readFromJson(path_coocking);
         JSONArray bakingRecipes = readFromJson(path_coocking);
