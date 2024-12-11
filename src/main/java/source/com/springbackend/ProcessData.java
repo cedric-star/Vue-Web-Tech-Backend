@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.function.Function;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONString;
 
@@ -21,9 +22,9 @@ import org.json.JSONString;
  * @see java.io
  */
 public class ProcessData {
-    private String path_backing;
-    private String path_coocking;
-    private String[] requiredJsonKeys;
+    private final String path_baking;
+    private final String path_cooking;
+    private final String[] requiredJsonKeys;
     private String message;
 
 
@@ -36,8 +37,8 @@ public class ProcessData {
      * about if or if not everything worked.
      */
     public ProcessData() {
-        this.path_backing="./data/baking/baking_recipes.json";
-        this.path_coocking="./data/cooking/cooking_recipes.json";
+        this.path_baking="./data/baking/baking_recipes.json";
+        this.path_cooking="./data/cooking/cooking_recipes.json";
         this.requiredJsonKeys = new String[]{"type", "name", "ingredients", "process"};
         this.message = "";
     }
@@ -54,6 +55,7 @@ public class ProcessData {
      * @return message for frontend and console logging
      */
     public String safeInput(String input) {
+        this.message = "";
         try {
             JSONObject inputJson = checkInput(input);
             if (isItemInData(inputJson.getString("name"))) return "already saved: "+inputJson.getString("name");
@@ -66,34 +68,43 @@ public class ProcessData {
 
             write2json(jsonArray, path);
         } catch (Exception e) {
-            System.err.println("An Exception occured: " + e.getMessage());
+            System.err.println("An Exception occured in safeInput(): " + e.getMessage());
+            e.printStackTrace();
         }
+
         String msg = getMessages("successfully saved recipe");
         message = "";
         System.out.println(msg);
         return msg;
     }
 
+
     public String getData(String type) {
-        System.out.println("type: "+type);
+        this.message = "";
+        String output = "";
+        try {
+            String path = getPathByType(type);
 
-        String path = getPathByType(type);
+            System.out.println("path: "+path);
+            if (path.isEmpty()) return "wrong recipe type";
 
-        System.out.println("path: "+path);
-        if (path.isEmpty()) return "wrong recipe type";
+            output = readFromJson(path).toString(0);
+            System.out.println("output: "+output);
+            String msg = getMessages("successfully got data");
+        } catch (Exception e) {
+            System.err.println("An Exception occured in getData(): " + e.getMessage());
+            e.printStackTrace();
+        }
 
-        String output = readFromJson(path).toString(0);
-        System.out.println("output: "+output);
-        String msg = getMessages("successfully got data");
+        String msg = getMessages("successfully saved recipe");
         message = "";
         System.out.println(msg);
         return output;
     }
 
 
-
-
     public String deleteInput(String input) {
+        this.message = "";
         try {
             String[] inputAr = input.split(";");
             String name = inputAr[0];
@@ -107,6 +118,7 @@ public class ProcessData {
             for (int i= jsonArray.length()-1; i>=0; i--) {
                 removedItemName = jsonArray.getJSONObject(i).getString("name");
                 if (removedItemName.equals(name)) {
+                    System.out.println("removed recipe name: "+jsonArray.getJSONObject(i).toString());
                     jsonArray.remove(i);
                     break;
                 }
@@ -115,8 +127,10 @@ public class ProcessData {
             System.out.println("successfully deleted: "+removedItemName);
 
         } catch (Exception e) {
-            System.err.println("An Exception occured: " + e.getMessage());
+            System.err.println("An Exception occured in deleteInput(): "+e.getMessage());
+            e.printStackTrace();
         }
+
         String msg = getMessages("successfully deleted data");
         message = "";
         System.out.println(msg);
@@ -130,18 +144,27 @@ public class ProcessData {
      * @return True if found, false if not.
      */
     private boolean isItemInData(String name) {
-        JSONArray cookingRecipes = readFromJson(path_coocking);
-        JSONArray bakingRecipes = readFromJson(path_coocking);
-        for (int i=0; i<cookingRecipes.length(); i++) {
-            if (cookingRecipes.getJSONObject(i).getString("name").equals(name)) {
-                return true;
+        JSONArray cookingRecipes = readFromJson(path_cooking);
+        JSONArray bakingRecipes = readFromJson(path_baking);
+        try {
+            for (int i=0; i<cookingRecipes.length(); i++) {
+                if (cookingRecipes.getJSONObject(i).getString("name").equals(name)) {
+                    return true;
+                }
             }
+        } catch (Exception e) {
+            errorHandler("Exception while checking if item is in cooking Recipes");
         }
-        for (int i=0; i<bakingRecipes.length(); i++) {
-            if (cookingRecipes.getJSONObject(i).getString("name").equals(name)) {
-                return true;
+        try {
+            for (int i=0; i<bakingRecipes.length(); i++) {
+                if (bakingRecipes.getJSONObject(i).getString("name").equals(name)) {
+                    return true;
+                }
             }
+        } catch (Exception e) {
+            errorHandler("Exception while checking if item is in baking Recipes");
         }
+
         return false;
     }
 
@@ -188,8 +211,8 @@ public class ProcessData {
      * @return Path to correct Json File or null and throws RuntimeException().
      */
     private String getPathByType(String type) {
-        if (type.equals("cooking")) {return path_coocking;}
-        else if (type.equals("baking")) {return path_backing;}
+        if (type.equals("cooking")) {return path_cooking;}
+        else if (type.equals("baking")) {return path_baking;}
         else { errorHandler("Invalid type: "+type);}
         return null;
     }
@@ -279,7 +302,7 @@ public class ProcessData {
      * @param message Error message that will be sent to user and console.
      */
     private void errorHandler(String message) {
-        this.message = message;
+        this.message += message;
         throw new RuntimeException(message);
     }
 
