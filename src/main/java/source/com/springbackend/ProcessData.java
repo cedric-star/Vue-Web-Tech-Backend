@@ -1,7 +1,7 @@
 package source.com.springbackend;
 
 import java.io.*;
-
+import java.util.ArrayList;
 
 import org.json.*;
 
@@ -48,7 +48,7 @@ public class ProcessData {
      * Try catch block wrapping code so the error
      * (if happen) don´t conflict with the running code.
      * @param input Incoming Json Object from frontend.
-     * @return message for frontend and console logging
+     * @return Message for frontend and console logging.
      */
     public String safeInput(String input) {
         this.message = "";
@@ -64,41 +64,43 @@ public class ProcessData {
 
             write2json(jsonArray, path);
         } catch (Exception e) {
-            System.err.println("An Exception occured in safeInput(): " + e.getMessage());
-            System.out.println("\n"+e);
+            System.err.println("An Exception occured in safeInput():\n"+e.getMessage());
         }
 
-        String msg = getMessages("successfully saved recipe");
-        message = "";
-        System.out.println(msg);
-        return msg;
+        return initProcessEnd("successfully added recipe");
     }
 
 
+    /**
+     * Description:
+     * returns one complete Json File,
+     * all recipes for on specific type.
+     * @param type Which recipes are requested.
+     * @return Parsed Json Array as String.
+     */
     public String getData(String type) {
         this.message = "";
         String output = "";
-        String path = "";
+        String path;
         try {
             path = getPathByType(type);
-
-            System.out.println("path: "+path);
-            if (path != null ? path.isEmpty() : false) return "wrong recipe type";
+            if (path == null || path.isEmpty()) return "wrong recipe type";
 
             output = readFromJson(path).toString(0);
-            System.out.println("output: "+output);
-        } catch (Exception e) {
-            System.err.println("An Exception occured in getData(): " + e.getMessage());
-            System.out.println("\n"+e);
+        }catch (Exception e) {
+            System.err.println("An Exception occured while getData():\n"+e.getMessage());
         }
 
-        String msg = getMessages("successfully saved recipe");
-        message = "";
-        System.out.println(msg);
-        return output;
+        return initProcessEnd(output);
     }
 
 
+    /**
+     * Description:
+     * Searches for a name
+     * @param input Takes name;type and deletes it in Json File for.
+     * @return Message for frontend console logging.
+     */
     public String deleteInput(String input) {
         this.message = "";
         try {
@@ -123,15 +125,12 @@ public class ProcessData {
             System.out.println("successfully deleted: "+removedItemName);
 
         } catch (Exception e) {
-            System.err.println("An Exception occured in deleteInput(): "+e.getMessage());
-            System.out.println("\n"+e);
+            System.err.println("An Exception occured while deleteInput():\n"+e.getMessage());
         }
 
-        String msg = getMessages("successfully deleted data");
-        message = "";
-        System.out.println(msg);
-        return msg.isEmpty() ? "successfully deleted recipe!" : msg;
+        return initProcessEnd("successfully deleted recipe");
     }
+
 
     /**
      * Description:
@@ -149,7 +148,7 @@ public class ProcessData {
                 }
             }
         } catch (Exception e) {
-            errorHandler("Exception while checking if item is in cooking Recipes");
+            errorHandler(e,"Exception while checking if item: "+name+" is in cooking Recipes Json");
         }
         try {
             for (int i=0; i<bakingRecipes.length(); i++) {
@@ -158,12 +157,31 @@ public class ProcessData {
                 }
             }
         } catch (Exception e) {
-            errorHandler("Exception while checking if item is in baking Recipes");
+            errorHandler(e,"Exception while checking if item: "+name+" is in cooking Recipes Json");
         }
-
         return false;
     }
 
+
+    /**
+     * Description:
+     * Takes a String such as a response message
+     * or Json content and either returns it
+     * to the user or, if anything went wrong send
+     * the message attribute as error response to
+     * the frontend.
+     * @param msg Content sent to frontend when everything worked.
+     * @return Content directly sen to frontend.
+     */
+    private String initProcessEnd(String msg) {
+        if (!message.isEmpty()) {
+            msg = message;
+            message = "";
+            return msg;
+        }
+        return msg;
+
+    }
 
 
     /**
@@ -181,19 +199,24 @@ public class ProcessData {
         try {
             jsonObject = new JSONObject(input);
         } catch (Exception e) {
-            e.printStackTrace();
-            errorHandler("Error while parsing input to JSONObject: "+input);
+            errorHandler(e,"Error while parsing input to JSONObject: "+input);
         }
+
+        ArrayList<String> keysNotFound = new ArrayList<>(10);
+        ArrayList<String> keysEmpty = new ArrayList<>(10);
         for (String requiredJsonKey : requiredJsonKeys) {
-            if (!jsonObject.has(requiredJsonKey)) {
-                errorHandler("Error, input hasn´t key "+requiredJsonKey);
-            }
-            if (jsonObject.getString(requiredJsonKey).isEmpty()) {
-                errorHandler("Error, key: "+requiredJsonKey+" is empty");
+            if (!jsonObject.has(requiredJsonKey)) keysNotFound.add(requiredJsonKey);
+            else {
+                if (jsonObject.getString(requiredJsonKey).equals("")||jsonObject.getString(requiredJsonKey) == null) {
+                    keysEmpty.add(requiredJsonKey);
+                }
             }
         }
+        if (!keysNotFound.isEmpty()) errorHandler(new Exception("Input Json misses some keys"),"Keys missing: "+keysNotFound.toString());
+        if  (!keysEmpty.isEmpty()) errorHandler(new Exception("Input Json has empty Values"),"Keys empty: "+keysEmpty.toString());
+
         if (jsonObject.length()!=requiredJsonKeys.length+1) {//plus on because of additives are not required
-            errorHandler("Error, input length "+requiredJsonKeys.length+" != "+jsonObject.length());
+            errorHandler(new Exception("Unexpected amount of keys in input Json"),"Input length "+requiredJsonKeys.length+" != "+jsonObject.length());
         }
         return jsonObject;
     }
@@ -209,7 +232,8 @@ public class ProcessData {
     private String getPathByType(String type) {
         if (type.equals("cooking")) {return path_cooking;}
         else if (type.equals("baking")) {return path_baking;}
-        else { errorHandler("Invalid type: "+type);}
+        else { errorHandler(new Exception("The type given to method: getPathByType()\nisn´t cooking or baking!")
+                ,"Invalid type: "+type);}
         return null;
     }
 
@@ -223,7 +247,7 @@ public class ProcessData {
      * @return Json Array from backend Json File.
      */
     private JSONArray readFromJson(String path) {
-        StringBuilder content = new StringBuilder();
+        StringBuilder content = new StringBuilder(1000);
         FileInputStream fis = null;
         BufferedInputStream bis = null;
         DataInputStream dis = null;
@@ -236,22 +260,19 @@ public class ProcessData {
                 content.append(dis.readLine());
                 content.append("\n");
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-            errorHandler("Error while reading file from backend!");
+        } catch (Exception e) {
+            errorHandler(e,"Error while reading file from backend");
         } finally {
             try {
                 fis.close();
                 bis.close();
                 dis.close();
-            } catch (Exception e) {
-                errorHandler("Error while closing file after reading!");
-                e.printStackTrace();
+            } catch (IOException e) {
+                errorHandler(e,"Error while closing file after reading");
             }
 
         }
-        JSONArray jsonArray = new JSONArray(content.toString());
-        return jsonArray;
+        return new JSONArray(content.toString());
     }
 
 
@@ -273,17 +294,15 @@ public class ProcessData {
 
             dos.writeBytes(content.toString(2));
 
-        } catch (IOException e) {
-            errorHandler("Error while writing to file in backend!");
-            e.printStackTrace();
+        } catch (Exception e) {
+            errorHandler(e, "Error while writing data back to file");
         } finally {
             try {
                 dos.close();
                 bos.close();
                 fos.close();
             } catch (IOException e) {
-                errorHandler("Error while closing file after writing!");
-                e.printStackTrace();
+                errorHandler(e, "Error while closing file after writing data");
             }
         }
     }
@@ -291,27 +310,17 @@ public class ProcessData {
 
     /**
      * Description:
-     * When a fatal error occures, the error message
+     * When a fatal error occurs, the error message
      * is being printed out and also
      * saved as String so that it can be sent
      * back for user information
      * @param message Error message that will be sent to user and console.
+     * @param e Exception, coming from specific error.
      */
-    private void errorHandler(String message) {
-        this.message += message;
+    private void errorHandler(Exception e, String message) {
+        System.out.println(e.getMessage());
+        System.out.println(message);
+        this.message = message;
         throw new RuntimeException(message);
     }
-
-
-    /**
-     * Description:
-     * Getter for messages,
-     * if there are no messages,
-     * @return String error message
-     * @see MessageController
-     */
-    private String getMessages(String emptyMessage) {
-        return (message.isEmpty()) ? emptyMessage : message;
-    }
-
 }
