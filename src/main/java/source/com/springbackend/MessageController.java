@@ -3,6 +3,8 @@ package source.com.springbackend;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.view.RedirectView;
 
 /**
  * Description:
@@ -50,7 +52,7 @@ public class MessageController {
 
     /**
      * Description:
-     * Definges /app/deletedata as url for deleting an Json
+     * Defines /app/deletedata as url for deleting specific Json
      * Object in the Json Files.
      * @param msg gives name and type of recipe: "name;type"
      * @return Sends user information message back to user.
