@@ -54,7 +54,7 @@ public class ProcessData {
         this.message = "";
         try {
             JSONObject inputJson = checkInput(input);
-            if (isItemInData(inputJson.getString("name"))) return "already saved: "+inputJson.getString("name");
+            if (isItemInData(inputJson.getString("name"), inputJson.getString("type"))) return "already saved: "+inputJson.getString("name");
 
 
             String path = getPathByType(inputJson.getString("type"));
@@ -106,8 +106,8 @@ public class ProcessData {
         try {
             String[] inputAr = input.split(";");
             String name = inputAr[0];
-            if (!isItemInData(name)) return "no such recipe name: "+name;
             String type = inputAr[1];
+            if (!isItemInData(name, type)) return "no such recipe name: "+name;
             String path = getPathByType(type);
 
             String removedItemName = "";
@@ -136,29 +136,25 @@ public class ProcessData {
      * Description:
      * Takes name and looks for it in the Json File.
      * @param name This name should stand in Json File "name":""
+     * @param type This specifies which type of recipes shall be searched.
      * @return True if found, false if not.
      */
-    private boolean isItemInData(String name) {
-        JSONArray cookingRecipes = readFromJson(path_cooking);
-        JSONArray bakingRecipes = readFromJson(path_baking);
+    private boolean isItemInData(String name, String type) {
+        JSONArray recipes = null;
+        if (type.equals("cooking")) recipes = readFromJson(path_cooking);
+        else if (type.equals("baking")) recipes = readFromJson(path_baking);
+        else errorHandler(new Exception("Wrong type for method isItemInData"), "Wrong type: "+type);
+
         try {
-            for (int i=0; i<cookingRecipes.length(); i++) {
-                if (cookingRecipes.getJSONObject(i).getString("name").equals(name)) {
+            for (int i=0; i<recipes.length(); i++) {
+                if (recipes.getJSONObject(i).getString("name").equals(name)) {
                     return true;
                 }
             }
         } catch (Exception e) {
-            errorHandler(e,"Exception while checking if item: "+name+" is in cooking Recipes Json");
+            errorHandler(e,"Exception while checking if item: "+name+" is in "+ type +"Recipes Json");
         }
-        try {
-            for (int i=0; i<bakingRecipes.length(); i++) {
-                if (bakingRecipes.getJSONObject(i).getString("name").equals(name)) {
-                    return true;
-                }
-            }
-        } catch (Exception e) {
-            errorHandler(e,"Exception while checking if item: "+name+" is in cooking Recipes Json");
-        }
+
         return false;
     }
 
