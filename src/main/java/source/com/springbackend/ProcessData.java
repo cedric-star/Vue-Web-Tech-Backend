@@ -173,7 +173,6 @@ public class ProcessData {
         if (!message.isEmpty()) {
             msg = message;
             message = "";
-            return msg;
         }
         return msg;
 
