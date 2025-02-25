@@ -1,12 +1,5 @@
 schreibe zwei json datein, sie sollen nur aus einem json array mit verschiedenen rezepten als einträgen. nach folgendem format: [
-{
-"process": "Cut the chicken into small pieces and fry it in a pan. Add the diced onions and bell peppers and fry them together. Pour in the coconut milk and curry paste and let everything simmer until the chicken is cooked through.",
-"additives": "meat",
-"name": "Chicken Curry",
-"ingredients": "Chicken breast (500g), Onion (1), Bell pepper (2), Coconut milk (400ml), Curry paste (2 tbsp)",
-"type": "cooking"
-}
-] schreibe 8 einträge pro datei, alles in englisch und setze in der einen datei überall type auf cooking und in der anderen auf baking schreibe also baking und cooking rezepte. additives sind nur zu setzen, wennes zusatzstoffe gibt oder sachen zum wissen wie vegan oder vegetarisch
+schreibe 8 einträge pro datei, alles in englisch und setze in der einen datei überall type auf cooking und in der anderen auf baking schreibe also baking und cooking rezepte. additives sind nur zu setzen, wennes zusatzstoffe gibt oder sachen zum wissen wie vegan oder vegetarisch
 ChatGPT:
 ChatGPT
 cooking.json
