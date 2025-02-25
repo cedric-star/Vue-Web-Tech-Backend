@@ -13,14 +13,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration
 public class CorsConfig {
-
     /**
      * Description:
      * Defines allowed parameters:
      * origins, methods.
      * Mapping to /** so every path will be mapped with
      * those CORS regulations.
-     * @return Adds the WebMvcConfigurer to Spring Application
+     * @return Adds the WebMvcConfigurer to the Spring Application
      */
     @Bean
     public WebMvcConfigurer corsConfigurer() {
